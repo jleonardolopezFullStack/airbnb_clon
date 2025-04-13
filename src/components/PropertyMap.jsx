@@ -1,19 +1,51 @@
 "use client";
 
-import {
+import { useEffect, useRef } from "react";
+import { Loader } from "@googlemaps/js-api-loader";
+
+export default function PropertyMap() {
+  const mapRef = useRef(null);
+
+  useEffect(() => {
+    const loader = new Loader({
+      apiKey: process.env.NEXT_PUBLIC_GOOGLE_GEOCODING_API_KEY, // reemplaza con tu API key
+      version: "weekly",
+    });
+
+    loader
+      .importLibrary("maps")
+      .then(() => {
+        if (mapRef.current) {
+          new google.maps.Map(mapRef.current, {
+            center: { lat: -34.397, lng: 150.644 },
+            zoom: 8,
+          });
+        }
+      })
+      .catch((e) => {
+        console.error("Error al cargar Google Maps:", e);
+      });
+  }, []);
+
+  return (
+    <div>
+      <div ref={mapRef} style={{ width: "100%", height: "500px" }} />
+    </div>
+  );
+}
+
+/* import {
   GoogleMap,
   useJsApiLoader,
-  Marker,
-  useLoadScript,
+  Marker,s
+  useLoadScript, 
   Circle,
   StandaloneSearchBox,
   LoadScript,
 } from "@react-google-maps/api";
 import React, { useEffect, useState, useMemo, useRef } from "react";
 
-const PropertyMap = ({
-  /* { radius, setLatitude, Style, address, setAddress, latitude, longitude, setLongitude } = */ property,
-}) => {
+const PropertyMap = ({ property }) => {
   const [location, setLocation] = useState(null);
   const [error, setError] = useState("");
 
@@ -46,64 +78,6 @@ const PropertyMap = ({
       setError("Geolocalización no está soportada en este navegador.");
     }
   }, []);
-  /* 
-  const [lat, setLat] = useState(null);
-  const [lng, setLng] = useState(null);
-  const [viewpoer, setViewpoer] = useState({
-    latitude: 0,
-    longitude: 0,
-    zoom: 12,
-    width: "100%",
-    height: "500px",
-  });
-  const [loading, setLoading] = useState(true);
-  const [geocodeError, setGeocodeError] = useState(false); 
-
-  const [map, setMap] = useState(null);
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_GEOCODING_API_KEY,
-    libraries: ["places"],
-  });
-
-  const center = useMemo(
-    () => ({ lat: latitude, lng: longitude }),
-    [latitude, longitude]
-  );
-
-  const changeCoordinate = (coord, index) => {
-    const { latlng } = coord;
-    const lat = latLng.lat();
-    const lng = latLng.lng();
-    setlatitude(lat);
-    setLongitude(lng);
-  };
-
-  useEffect(() => {
-    map?.panTo({ lat: latitude, lng: longitude });
-  }, [latitude, longitude]);
-
-  /*   useEffect(() => {
-    const fetchCoords = async () => {
-      try {
-        const res = await fromAddress(
-          `${property.location.street} ${property.location.city} ${property.location.state} ${property.location.zipcode}`
-        );
-
-        // Check geocode results
-        if (res.results.length === 0) {
-          setGeocodeError(true);
-          return;
-        }
-        const { lat, lng } = res.results[0].geometry.location;
-        console.log(lat, lng);
-      } catch (error) {
-        console.log(error);
-        setGeocodeError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-  }, []); */
 
   return (
     <div>
@@ -124,3 +98,4 @@ const PropertyMap = ({
 };
 
 export default PropertyMap;
+ */
